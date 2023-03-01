@@ -187,18 +187,15 @@ def mainMenu():
                     menu += 1
                     drawMenu(menu)
                 if event.key == pygame.K_SPACE:
-                    if menu == 0:
+                    if menu == 1:
                         print("click")
                         playPVP()
-                    elif menu == 1:
-                        pass
                     elif menu == 2:
+                        pass
+                    elif menu == 3:
                         pass
 
         pygame.display.update()
-
-
-mainMenu()
 
 
 def playPVP():
@@ -229,3 +226,17 @@ def playPVP():
                         player = 1
 
         pygame.display.update()
+
+
+def playEasy():
+    buildBoard()
+    gameover = False
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                sys.exit()
+
+        pygame.display.update()
+
+
+mainMenu()
