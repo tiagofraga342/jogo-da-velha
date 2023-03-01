@@ -18,22 +18,26 @@ BG_COLOR = (20, 189, 172)
 LINE_COLOR = (13, 161, 146)
 CIRCLE_COLOR = (242, 235, 211)
 X_COLOR = (84, 84, 84)
+TEXT_COLOR = (84, 84, 84)
 
 # Draw the window
 window = pygame.display.set_mode((WINDOW_SIZE, WINDOW_SIZE))
 
 # Set the window title
 pygame.display.set_caption('Joguinho da velha :)')
-window.fill(BG_COLOR)
 
 # Set the board matrice
 board = np.zeros((BOARD_SIZE, BOARD_SIZE))
 
-# Set the player variable
-player = 1
+# Set AI level
+level = 0
 
-# Set gameover variable
-gameover = False
+font = pygame.font.SysFont("arialblack", 30)
+
+
+def draw_text(text, font, text_color, x, y):
+    img = font.render(text, True, text_color)
+    window.blit(img, (x, y))
 
 
 # Function to draw the bg lines
@@ -46,7 +50,32 @@ def draw_lines():
     pygame.draw.line(window, LINE_COLOR, (400, 0), (400, 600), LINE_WIDTH)
 
 
-draw_lines()
+def buildBoard():
+    window.fill(BG_COLOR)
+    draw_lines()
+
+
+def drawMenu(menu):
+    window.fill(BG_COLOR)
+    draw_text("Choose the GAME MODE", font, TEXT_COLOR, 100, 100)
+    draw_text("Press ENTER to select", font, TEXT_COLOR, 100, 500)
+    draw_text("PvP", font, TEXT_COLOR, 70, 350)
+    draw_text("Easy", font, TEXT_COLOR, 262, 350)
+    draw_text("Hard", font, TEXT_COLOR, 462, 350)
+
+    pygame.draw.circle(window, CIRCLE_COLOR, (500, 300), 40, 10)
+    pygame.draw.circle(window, CIRCLE_COLOR, (300, 300), 40, 10)
+    pygame.draw.circle(window, CIRCLE_COLOR, (100, 300), 40, 10)
+
+    if menu == 1:
+        pygame.draw.line(window, X_COLOR, (70, 270), (130, 330), X_WIDTH - 5)
+        pygame.draw.line(window, X_COLOR, (130, 270), (70, 330), X_WIDTH - 5)
+    elif menu == 2:
+        pygame.draw.line(window, X_COLOR, (270, 270), (330, 330), X_WIDTH - 5)
+        pygame.draw.line(window, X_COLOR, (330, 270), (270, 330), X_WIDTH - 5)
+    elif menu == 3:
+        pygame.draw.line(window, X_COLOR, (470, 270), (530, 330), X_WIDTH - 5)
+        pygame.draw.line(window, X_COLOR, (530, 270), (470, 330), X_WIDTH - 5)
 
 
 def draw_verticalLine(col, player):
@@ -142,28 +171,61 @@ def checkWin(player):
     return False
 
 
-# Main loop
-while True:
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            sys.exit()
+def mainMenu():
+    menu = 1
+    drawMenu(menu)
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                sys.exit()
 
-        if event.type == pygame.MOUSEBUTTONDOWN and not gameover:
-            mouseX = event.pos[0]  # Stores the X click coordinate
-            mouseY = event.pos[1]  # Stores the Y click coordinate
-            clicked_row = int(mouseY // 200)  # Convert the Y coordinate into a row index
-            clicked_col = int(mouseX // 200)  # Convert the X coordinate into a col index
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_LEFT and menu > 1:
+                    menu -= 1
+                    drawMenu(menu)
+                elif event.key == pygame.K_RIGHT and menu < 3:
+                    menu += 1
+                    drawMenu(menu)
+                if event.key == pygame.K_SPACE:
+                    if menu == 0:
+                        print("click")
+                        playPVP()
+                    elif menu == 1:
+                        pass
+                    elif menu == 2:
+                        pass
 
-            if availableSquare(clicked_row, clicked_col):
-                if player == 1:
-                    markSquare(clicked_row, clicked_col, player)
-                    if checkWin(player):
-                        gameover = True
-                    player = 2
-                elif player == 2:
-                    markSquare(clicked_row, clicked_col, player)
-                    if checkWin(player):
-                        gameover = True
-                    player = 1
+        pygame.display.update()
 
-    pygame.display.update()
+
+mainMenu()
+
+
+def playPVP():
+    buildBoard()
+    gameover = False
+    player = 1
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                sys.exit()
+
+            if event.type == pygame.MOUSEBUTTONDOWN and not gameover:
+                mouseX = event.pos[0]  # Stores the X click coordinate
+                mouseY = event.pos[1]  # Stores the Y click coordinate
+                clicked_row = int(mouseY // 200)  # Convert the Y coordinate into a row index
+                clicked_col = int(mouseX // 200)  # Convert the X coordinate into a col index
+
+                if availableSquare(clicked_row, clicked_col):
+                    if player == 1:
+                        markSquare(clicked_row, clicked_col, player)
+                        if checkWin(player):
+                            gameover = True
+                        player = 2
+                    elif player == 2:
+                        markSquare(clicked_row, clicked_col, player)
+                        if checkWin(player):
+                            gameover = True
+                        player = 1
+
+        pygame.display.update()
