@@ -32,6 +32,9 @@ board = np.zeros((BOARD_SIZE, BOARD_SIZE))
 # Set the player variable
 player = 1
 
+# Set gameover variable
+gameover = False
+
 
 # Function to draw the bg lines
 def draw_lines():
@@ -145,7 +148,7 @@ while True:
         if event.type == pygame.QUIT:
             sys.exit()
 
-        if event.type == pygame.MOUSEBUTTONDOWN:
+        if event.type == pygame.MOUSEBUTTONDOWN and not gameover:
             mouseX = event.pos[0]  # Stores the X click coordinate
             mouseY = event.pos[1]  # Stores the Y click coordinate
             clicked_row = int(mouseY // 200)  # Convert the Y coordinate into a row index
@@ -154,11 +157,13 @@ while True:
             if availableSquare(clicked_row, clicked_col):
                 if player == 1:
                     markSquare(clicked_row, clicked_col, player)
-                    checkWin(player)
+                    if checkWin(player):
+                        gameover = True
                     player = 2
                 elif player == 2:
                     markSquare(clicked_row, clicked_col, player)
-                    checkWin(player)
+                    if checkWin(player):
+                        gameover = True
                     player = 1
 
     pygame.display.update()
