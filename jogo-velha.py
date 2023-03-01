@@ -23,6 +23,9 @@ window.fill(BG_COLOR)
 # Set the board matrice
 board = np.zeros((BOARD_SIZE, BOARD_SIZE))
 
+# Set the player variable
+player = 0
+
 
 # Function to draw the lines
 def draw_lines():
@@ -58,5 +61,19 @@ while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             sys.exit()
+
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            mouseX = event.pos[0]  # Stores the X click coordinate
+            mouseY = event.pos[1]  # Stores the Y click coordinate
+            clicked_row = int(mouseX // 200)  # Convert the X coordinate into a row index
+            clicked_col = int(mouseY // 200)  # Convert the Y coordinate into a col index
+
+            if availableSquare(clicked_row, clicked_col):
+                if player == 0:
+                    markSquare(clicked_row, clicked_col, player)
+                    player = 1
+                elif player == 1:
+                    markSquare(clicked_row, clicked_col, player)
+                    player = 0
 
     pygame.display.update()
