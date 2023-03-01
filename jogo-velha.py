@@ -43,6 +43,49 @@ def draw_lines():
     pygame.draw.line(window, LINE_COLOR, (400, 0), (400, 600), LINE_WIDTH)
 
 
+draw_lines()
+
+
+def draw_verticalLine(col, player):
+    posX = col * 200 + 100
+
+    if player == 1:
+        color = CIRCLE_COLOR
+    elif player == 2:
+        color = X_COLOR
+
+    pygame.draw.line(window, color, (posX, 15), (posX, WINDOW_SIZE - 15), 15)
+
+
+def draw_horizontalLine(row, player):
+    posY = row * 200 + 100
+
+    if player == 1:
+        color = CIRCLE_COLOR
+    elif player == 2:
+        color = X_COLOR
+
+    pygame.draw.line(window, color, (15, posY), (WINDOW_SIZE - 15, posY), 15)
+
+
+def draw_diagonalPrincipalLine(player):
+    if player == 1:
+        color = CIRCLE_COLOR
+    elif player == 2:
+        color = X_COLOR
+
+    pygame.draw.line(window, color, (15, 15), (WINDOW_SIZE - 15, WINDOW_SIZE - 15), 15)
+
+
+def draw_diagonalSecondaryLine(player):
+    if player == 1:
+        color = CIRCLE_COLOR
+    elif player == 2:
+        color = X_COLOR
+
+    pygame.draw.line(window, color, (15, WINDOW_SIZE - 15), (WINDOW_SIZE - 15, 15), 15)
+
+
 # Function to mark the square
 def markSquare(row, col, player):
     board[row][col] = player
@@ -69,7 +112,32 @@ def boardFull():
     return True
 
 
-draw_lines()
+# Function to check if a player won the match
+def checkWin(player):
+    # Check vertical win
+    for col in range(BOARD_SIZE):
+        if board[0][col] == player and board[1][col] == player and board[2][col] == player:
+            draw_verticalLine(col, player)
+            return True
+
+    # Check horizontal win
+    for row in range(BOARD_SIZE):
+        if board[row][0] == player and board[row][1] == player and board[row][2] == player:
+            draw_horizontalLine(row, player)
+            return True
+
+    # Check principal diagonal win
+    if board[0][0] == player and board[1][1] == player and board[2][2] == player:
+        draw_diagonalPrincipalLine(player)
+        return True
+
+    # Check secondary diagonal win
+    if board[2][0] == player and board[1][1] == player and board[0][2] == player:
+        draw_diagonalSecondaryLine(player)
+        return True
+
+    return False
+
 
 # Main loop
 while True:
@@ -86,9 +154,11 @@ while True:
             if availableSquare(clicked_row, clicked_col):
                 if player == 1:
                     markSquare(clicked_row, clicked_col, player)
+                    checkWin(player)
                     player = 2
                 elif player == 2:
                     markSquare(clicked_row, clicked_col, player)
+                    checkWin(player)
                     player = 1
 
     pygame.display.update()
