@@ -1,5 +1,7 @@
 # Joguinho da velha em Python
 
+![screenshot](/img/screenshot.jpg "screenshot")
+
 ## Modos:
 
 O projeto consta com os 3 seguintes modos de jogo:
