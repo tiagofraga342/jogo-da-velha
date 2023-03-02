@@ -1,6 +1,8 @@
 import pygame
+import random
 import sys
 import numpy as np
+import time
 
 pygame.init()
 
@@ -191,7 +193,7 @@ def mainMenu():
                         print("click")
                         playPVP()
                     elif menu == 2:
-                        pass
+                        playEasy()
                     elif menu == 3:
                         pass
 
@@ -228,13 +230,42 @@ def playPVP():
         pygame.display.update()
 
 
+def easyBot():
+    col = random.randint(0, 2)
+    row = random.randint(0, 2)
+    while not availableSquare(row, col):
+        col = random.randint(0, 2)
+        row = random.randint(0, 2)
+
+    markSquare(row, col, 2)
+
+
 def playEasy():
     buildBoard()
     gameover = False
+    player = 1
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 sys.exit()
+
+            if event.type == pygame.MOUSEBUTTONDOWN and not gameover:
+                mouseX = event.pos[0]  # Stores the X click coordinate
+                mouseY = event.pos[1]  # Stores the Y click coordinate
+                clicked_row = int(mouseY // 200)  # Convert the Y coordinate into a row index
+                clicked_col = int(mouseX // 200)  # Convert the X coordinate into a col index
+
+                if availableSquare(clicked_row, clicked_col):
+                    if player == 1:
+                        markSquare(clicked_row, clicked_col, player)
+                        if checkWin(player):
+                            gameover = True
+                        player = 2
+            if player == 2:
+                easyBot()
+                if checkWin(player):
+                    gameover = True
+                player = 1
 
         pygame.display.update()
 
