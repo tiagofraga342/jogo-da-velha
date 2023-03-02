@@ -10,4 +10,4 @@ O projeto consta com os 3 seguintes modos de jogo:
 
 - Hard (Jogo contra bot utilizando o algoritmo Minimax)
 
-## Minimax:
+## Como funciona o algoritmo Minimax?
