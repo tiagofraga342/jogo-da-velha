@@ -1,6 +1,6 @@
 # Joguinho da velha em Python
 
-![screenshot](/img/screenshot.jpg "screenshot")
+![screenshot](/img/screenshot.png "screenshot")
 
 ## Modos:
 
