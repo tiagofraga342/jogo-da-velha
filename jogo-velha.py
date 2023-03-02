@@ -188,7 +188,7 @@ def mainMenu():
                 elif event.key == pygame.K_RIGHT and menu < 3:
                     menu += 1
                     drawMenu(menu)
-                if event.key == pygame.K_SPACE:
+                if event.key == pygame.K_RETURN:
                     if menu == 1:
                         print("click")
                         playPVP()
